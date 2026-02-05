@@ -52,7 +52,9 @@ export async function POST() {
       });
     }
 
-    await collection.insertOne(quotationData);
+    // Exclude _id when inserting (MongoDB will generate it)
+    const { _id, ...dataToInsert } = quotationData;
+    await collection.insertOne(dataToInsert as any);
 
     return NextResponse.json({
       message: 'Database initialized successfully',

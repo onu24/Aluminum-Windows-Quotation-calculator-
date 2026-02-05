@@ -98,7 +98,7 @@ function parsePDFText(text: string): QuotationData {
     if (currentProfile) {
       // Extract total cost for this profile
       const profileTotalMatch = line.match(totalCostPattern);
-      if (profileTotalMatch && !pricePattern.test(line.split(totalCostPattern[0])[0] || '')) {
+      if (profileTotalMatch && !pricePattern.test(line.split(profileTotalMatch[0])[0] || '')) {
         currentProfile.totalCost = parseFloat(profileTotalMatch[1].replace(/,/g, ''));
       }
 

@@ -10,6 +10,7 @@ interface Material {
   unit: string;
   unitPrice: number;
   totalPrice: number;
+  code?: string;
 }
 
 interface CalculationResult {

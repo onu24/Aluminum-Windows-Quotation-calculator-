@@ -41,8 +41,9 @@ export async function POST(request: NextRequest) {
     quotationData.version = newVersion;
     quotationData.lastUpdated = new Date();
 
-    // Insert new version
-    await collection.insertOne(quotationData);
+    // Insert new version (exclude _id, MongoDB will generate it)
+    const { _id, ...dataToInsert } = quotationData;
+    await collection.insertOne(dataToInsert as any);
 
     return NextResponse.json({
       message: 'Quotation data uploaded successfully',

@@ -20,9 +20,10 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Update data
-    const updatedData: QuotationData = {
-      ...currentData,
+    // Update data (exclude _id from currentData, MongoDB will generate new one)
+    const { _id, ...currentDataWithoutId } = currentData as any;
+    const updatedData = {
+      ...currentDataWithoutId,
       ...body,
       lastUpdated: new Date(),
       version: (currentData.version || 1) + 1
