@@ -1,6 +1,10 @@
 import { MongoClient, Db } from 'mongodb';
 
-const options = {};
+const options = {
+  tls: true,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+};
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient> | null = null;
