@@ -8,7 +8,9 @@ import {
 } from 'react-icons/fa';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { usePricing } from '@/context/PricingContext';
+import { useAuth } from '@/context/AuthContext';
 
 export default function AdminPage() {
   const {
@@ -20,8 +22,20 @@ export default function AdminPage() {
     lastUpdated, resetToDefaults, saveAll
   } = usePricing();
 
+  const { isAuthenticated, logout } = useAuth();
+  const router = useRouter();
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
+
   const [activeTab, setActiveTab] = useState<'pricing' | 'materials' | 'settings'>('pricing');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+
+  if (!isAuthenticated) return null; // Prevents flash of content before redirect
 
   // Local state for edits
   const [localProfiles, setLocalProfiles] = useState(profiles);
@@ -124,6 +138,13 @@ export default function AdminPage() {
               </div>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                onClick={logout}
+                className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-all border border-red-100 text-sm font-bold min-h-[44px]"
+              >
+                <FaSync className="w-4 h-4" />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
               <button
                 onClick={handleSave}
                 disabled={saveStatus === 'saving'}
