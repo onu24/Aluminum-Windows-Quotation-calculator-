@@ -130,7 +130,7 @@ export const QuotationPDF = React.forwardRef<HTMLDivElement, QuotationPDFProps>(
                         </div>
                         <div>
                             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Area</p>
-                            <p className="text-sm font-bold text-gray-900">{calculation.areaSqFt.toFixed(2)} Sq.Ft</p>
+                            <p className="text-sm font-bold text-gray-900">{calculation.areaSqFtDisplay} Sq.Ft</p>
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@ export const QuotationPDF = React.forwardRef<HTMLDivElement, QuotationPDFProps>(
                                 <p className="text-xs text-gray-400 mt-1">{profile.name} casement system including accessories.</p>
                             </td>
                             <td className="py-4 text-right">₹{profile.basePrice.toLocaleString()}</td>
-                            <td className="py-4 text-right">{calculation.areaSqFt.toFixed(2)}</td>
+                            <td className="py-4 text-right">{calculation.areaSqFtDisplay}</td>
                             <td className="py-4 text-right font-bold">₹{calculation.basePrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
                         </tr>
                         <tr>
@@ -166,7 +166,7 @@ export const QuotationPDF = React.forwardRef<HTMLDivElement, QuotationPDFProps>(
                                 <p className="text-xs text-gray-400 mt-1">{glass?.name || 'Standard Glass'}</p>
                             </td>
                             <td className="py-4 text-right">₹{glass?.surcharge.toLocaleString() || 0}</td>
-                            <td className="py-4 text-right">{calculation.areaSqFt.toFixed(2)}</td>
+                            <td className="py-4 text-right">{calculation.areaSqFtDisplay}</td>
                             <td className="py-4 text-right font-bold">₹{calculation.glassSurcharge.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
                         </tr>
                         <tr className="bg-blue-50/30">

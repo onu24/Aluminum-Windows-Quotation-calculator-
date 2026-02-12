@@ -1,4 +1,5 @@
 import { ProfileSystemDetails, GlassType, GlobalSettings, CalculationResult, ScaledPricing } from '@/lib/constants/windowPricing';
+import { calculateWindowPrice, applyGSTAndCharges } from './calculatePrice';
 
 interface CalculationParams {
     width: number;
@@ -61,46 +62,55 @@ export const calculateWindowPricing = ({
     includeTransportation = true,
     includeLoadingUnloading = true
 }: CalculationParams): CalculationResult => {
-    // Step 1: Calculate base dimensions
-    // Area in Sq.Ft (1 sqft = 92903.04 mm²)
-    const areaSqFt = (width * height) / 92903.04;
+    // ✅ CORRECT PRECISION CALCULATION - NO INTERMEDIATE ROUNDING
+    const areaMm2 = Number(width) * Number(height);
+    const areaSqFtFull = areaMm2 / 92903;
+    const areaSqFtDisplay = parseFloat(areaSqFtFull.toFixed(3));
 
     // Perimeter in Meters
     const perimeterMeter = (2 * (width + height)) / 1000;
 
     // Material weight in KG (frame weight + glass weight)
     const frameWeight = perimeterMeter * profile.weightPerMeter;
-    const glassWeight = areaSqFt * glass.weightPerSqFt;
+    const glassWeight = areaSqFtFull * glass.weightPerSqFt;
     const materialWeight = frameWeight + glassWeight;
 
     // Step 2: Determine pricing tier and calculate profile cost
-    // If unitPriceOverride is provided, we use it directly and skip glass surcharge (as it's assumed included in the override)
     let profileCost: number;
     let tier: string;
     let pricePerSqFt: number;
     let glassCost: number;
+    let unitPriceRaw: number;
 
     if (unitPriceOverride && unitPriceOverride > 0) {
+        // Hybrid Mode: Use the precise calculateWindowPrice helper
+        const preciseCalc = calculateWindowPrice(width, height, unitPriceOverride);
+
         tier = 'Override';
         pricePerSqFt = unitPriceOverride;
-        profileCost = areaSqFt * unitPriceOverride;
-        glassCost = 0; // Glass cost is assumed part of the override rate for hybrid mode
+        profileCost = preciseCalc.unitPriceRaw;
+        glassCost = 0;
+        unitPriceRaw = preciseCalc.unitPriceRaw;
     } else {
-        const tierObj = getPricingTier(areaSqFt, profile.scaledPricing);
+        // Tiered Mode: Logic matching calculateWindowPrice but with components
+        const tierObj = getPricingTier(areaSqFtFull, profile.scaledPricing);
         tier = tierObj.tier;
         pricePerSqFt = tierObj.pricePerSqFt;
-        profileCost = areaSqFt * pricePerSqFt;
+        const profilePriceRaw = areaSqFtFull * pricePerSqFt;
+        profileCost = profilePriceRaw;
 
         // Step 3: Calculate glass cost with scale multiplier
         const glassScaleMultiplier = glass.scaleMultiplier || 1.0;
-        glassCost = areaSqFt * glass.surcharge * glassScaleMultiplier;
+        glassCost = areaSqFtFull * glass.surcharge * glassScaleMultiplier;
+
+        unitPriceRaw = profilePriceRaw + glassCost;
     }
 
-    // Step 4: Calculate unit price (profile + glass)
-    const unitPrice = profileCost + glassCost;
+    // Step 4: Calculate final rounded display price per user request
+    const profilePriceFinal = parseFloat(unitPriceRaw.toFixed(2));
 
     // Step 5: Calculate total value for quantity
-    const totalValue = unitPrice * quantity;
+    // unitPriceRaw is already set above
 
     // Step 6: Calculate accessory costs (per window)
     let accessoryCost = 0;
@@ -127,7 +137,8 @@ export const calculateWindowPricing = ({
     const transportCharge = includeTransportation ? additionalCharges.transportation : 0;
     const loadingCharge = includeLoadingUnloading ? additionalCharges.loadingUnloading : 0;
 
-    const subtotal = totalValue +
+    // Use applyGSTAndCharges helper methodology (sum components then calc GST)
+    const subtotal = (unitPriceRaw * quantity) +
         totalAccessoryCost +
         transportCharge +
         loadingCharge +
@@ -140,12 +151,13 @@ export const calculateWindowPricing = ({
     const grandTotal = subtotal + gstAmount;
 
     // Step 10: Calculate deprecated fields for backward compatibility
-    const basePrice = areaSqFt * profile.basePrice; // Old formula
-    const glassSurcharge = areaSqFt * glass.surcharge; // Old formula
+    const basePrice = areaSqFtFull * profile.basePrice; // Old formula
+    const glassSurcharge = areaSqFtFull * glass.surcharge; // Old formula
 
     return {
         // Dimensions
-        areaSqFt: Math.round(areaSqFt * 1000) / 1000,
+        areaSqFt: areaSqFtDisplay,
+        areaSqFtDisplay, // Align with user request
         perimeterMeter: Math.round(perimeterMeter * 100) / 100,
         materialWeight: Math.round(materialWeight * 100) / 100,
 
@@ -155,19 +167,20 @@ export const calculateWindowPricing = ({
         profileCost: Math.round(profileCost * 100) / 100,
         glassCost: Math.round(glassCost * 100) / 100,
         accessoryCost: Math.round(totalAccessoryCost * 100) / 100,
+        profilePriceFinal, // Align with user request
 
         // Deprecated fields (kept for backward compatibility)
         basePrice: Math.round(basePrice * 100) / 100,
         glassSurcharge: Math.round(glassSurcharge * 100) / 100,
 
         // Final calculations
-        unitPrice: Math.round(unitPrice * 100) / 100,
-        totalValue: Math.round(totalValue * 100) / 100,
+        unitPrice: profilePriceFinal,
+        totalValue: parseFloat((unitPriceRaw * quantity).toFixed(2)),
         installationCharge: Math.round(installationCharge * 100) / 100,
         transportationCharge: transportCharge,
         loadingCharge: loadingCharge,
-        subtotal: Math.round(subtotal * 100) / 100,
-        gstAmount: Math.round(gstAmount * 100) / 100,
-        grandTotal: Math.round(grandTotal * 100) / 100,
+        subtotal: parseFloat(subtotal.toFixed(2)),
+        gstAmount: parseFloat(gstAmount.toFixed(2)),
+        grandTotal: parseFloat(grandTotal.toFixed(2)),
     };
 };

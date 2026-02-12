@@ -55,6 +55,8 @@ export interface CalculationResult {
   profileCost: number;
   glassCost: number;
   accessoryCost: number;
+  areaSqFtDisplay: number; // For direct display alignment
+  profilePriceFinal: number; // For direct display alignment
 
   // Deprecated fields (kept for backward compatibility)
   basePrice: number;

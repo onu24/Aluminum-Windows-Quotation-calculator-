@@ -117,7 +117,7 @@ const ResultSection: React.FC<ResultSectionProps> = ({
                         </div>
                         <div className="flex justify-between">
                             <span className="text-sm text-gray-500">Total Area</span>
-                            <span className="text-sm font-medium text-gray-900">{calculation.areaSqFt.toFixed(3)} Sq.Ft</span>
+                            <span className="text-sm font-medium text-gray-900">{calculation.areaSqFtDisplay} Sq.Ft</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-sm text-gray-500">Glass Type</span>
@@ -148,7 +148,7 @@ const ResultSection: React.FC<ResultSectionProps> = ({
                         <div className="flex justify-between items-center">
                             <span className="text-sm text-gray-500">Profile Cost</span>
                             <span className="text-sm font-medium text-gray-900">
-                                ₹{calculation.profileCost.toLocaleString('en-IN')}
+                                ₹{calculation.profilePriceFinal.toLocaleString('en-IN')}
                             </span>
                         </div>
                         <div className="flex justify-between items-center">
