@@ -125,7 +125,7 @@ export default function Home() {
       // 1. Clear dimensions for manual entry
       setWidth('');
       setHeight('');
-      if (formula.defaultQuantity) setQuantity(formula.defaultQuantity.toString());
+
 
       // 2. Set Profile and Glass
       if (profiles[formula.profile]) {

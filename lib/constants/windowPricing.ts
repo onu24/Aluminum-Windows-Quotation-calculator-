@@ -133,11 +133,13 @@ export const DEFAULT_PROFILE_SYSTEMS: Record<string, ProfileSystemDetails> = {
 };
 
 export const DEFAULT_GLASS_TYPES: GlassType[] = [
-  { id: 'frosted-5mm', name: '5mm Frosted Toughened Glass', surcharge: 100, weightPerSqFt: 0.05, scaleMultiplier: 1.0 },
-  { id: 'clear-8mm', name: '8mm Clear Toughened Glass', surcharge: 150, weightPerSqFt: 0.08, scaleMultiplier: 1.0 },
-  { id: 'laminated-11.52mm-single', name: '11.52mm Laminated Glass Single', surcharge: 250, weightPerSqFt: 0.15, scaleMultiplier: 1.0 },
-  { id: 'laminated-11.52mm-double', name: '11.52mm Laminated Glass Double', surcharge: 400, weightPerSqFt: 0.25, scaleMultiplier: 0.98 },
-  { id: 'laminated-51.52mm', name: '51.52mm Laminated Glass', surcharge: 600, weightPerSqFt: 0.50, scaleMultiplier: 0.95 },
+  { id: 'frosted-5mm', name: '5mm Frosted Toughened Glass (Exhaust/WR)', surcharge: 100, weightPerSqFt: 0.05, scaleMultiplier: 1.0 },
+  { id: 'clear-8mm', name: '8mm Clear Toughened Glass (Modern)', surcharge: 150, weightPerSqFt: 0.08, scaleMultiplier: 1.0 },
+  { id: 'laminated-11.52mm', name: '11.52mm Laminated Glass (Standard)', surcharge: 250, weightPerSqFt: 0.15, scaleMultiplier: 1.0 },
+  { id: 'laminated-51.52mm', name: '51.52mm Laminated Glass (Premium)', surcharge: 600, weightPerSqFt: 0.50, scaleMultiplier: 0.95 },
+  // New types for specific windows
+  { id: 'laminated-6x.52mm', name: '61.52/63.52mm Laminated Glass', surcharge: 750, weightPerSqFt: 0.60, scaleMultiplier: 0.95 },
+  { id: 'toughened-12mm', name: '12mm Toughened Glass', surcharge: 250, weightPerSqFt: 0.12, scaleMultiplier: 1.0 },
 ];
 
 export const DEFAULT_ADDITIONAL_CHARGES = {
