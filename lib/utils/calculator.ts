@@ -63,7 +63,7 @@ export const calculateWindowPricing = ({
     includeLoadingUnloading = true
 }: CalculationParams): CalculationResult => {
     // ✅ CORRECT PRECISION CALCULATION - USING ROUNDED AREA AS BASIS
-    const area = parseFloat(((Number(width) * Number(height)) / 92903).toFixed(3));
+    const area = parseFloat(((Number(width) * Number(height)) / 92891).toFixed(3));
     const areaSqFtFull = area; // Now using the rounded area for all calculations
     const areaSqFtDisplay = area;
 

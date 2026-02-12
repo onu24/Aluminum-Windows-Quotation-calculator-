@@ -5,9 +5,9 @@ export function calculateWindowQuotation(
   quotationData: QuotationData
 ): WindowCalculationResult {
   const { width, height, profileType, quantity = 1 } = input;
-  
+
   // Find the profile
-  const profile = quotationData.profiles.find(p => 
+  const profile = quotationData.profiles.find(p =>
     p.name.toLowerCase().includes(profileType.toLowerCase()) ||
     profileType.toLowerCase().includes(p.name.toLowerCase()) ||
     (p.code && p.code.toLowerCase() === profileType.toLowerCase())
@@ -25,8 +25,8 @@ export function calculateWindowQuotation(
   const widthM = width / 1000; // Convert mm to meters
   const heightM = height / 1000; // Convert mm to meters
   const perimeter = 2 * (widthM + heightM); // Perimeter in meters
-  const areaSqM = widthM * heightM; // Area in square meters
-  const areaSqFt = areaSqM * 10.764; // Convert to square feet (1 sq m = 10.764 sq ft)
+  const areaSqM = (width * height) / 1000000;
+  const areaSqFt = parseFloat(((width * height) / 92891).toFixed(3));
   const sqFtPerWindow = areaSqFt;
 
   // Calculate materials based on window dimensions
@@ -37,7 +37,7 @@ export function calculateWindowQuotation(
     // Calculate quantity based on material type and formulas
     const materialName = material.name.toLowerCase();
     const materialCategory = material.category?.toLowerCase() || '';
-    
+
     if (materialCategory.includes('frame') || materialName.includes('frame') || materialName.includes('profile')) {
       // Frame material: based on perimeter
       materialQuantity = perimeter;

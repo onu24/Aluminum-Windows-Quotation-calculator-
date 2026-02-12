@@ -1,7 +1,7 @@
 // lib/utils/calculatePrice.ts
 // ⚠️ NO INTERMEDIATE ROUNDING - FULL PRECISION CALCULATIONS
 
-const CONVERSION_FACTOR = 92903; // 1 Sq.Ft = 92903 mm²
+const CONVERSION_FACTOR = 92891; // 1 Sq.Ft = 92891 mm²
 
 export function calculateWindowPrice(
     widthMm: number,
