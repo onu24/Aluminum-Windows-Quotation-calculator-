@@ -114,6 +114,48 @@ const ResultSection: React.FC<ResultSectionProps> = ({
                     </div>
                 </div>
 
+                {/* Pricing Tier & Breakdown Card */}
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+                    <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
+                        <div className="flex justify-between items-center">
+                            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+                                Pricing Breakdown
+                            </h3>
+                            <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">
+                                {calculation.pricingTier}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="p-6 space-y-4">
+                        <div className="flex justify-between items-center pb-3 border-b border-gray-100">
+                            <span className="text-sm text-gray-600">Profile Rate</span>
+                            <span className="text-sm font-semibold text-gray-900">
+                                ₹{calculation.profilePricePerSqFt.toLocaleString('en-IN')}/Sq.Ft
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-500">Profile Cost</span>
+                            <span className="text-sm font-medium text-gray-900">
+                                ₹{calculation.profileCost.toLocaleString('en-IN')}
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-500">Glass Cost</span>
+                            <span className="text-sm font-medium text-gray-900">
+                                ₹{calculation.glassCost.toLocaleString('en-IN')}
+                            </span>
+                        </div>
+                        {calculation.accessoryCost > 0 && (
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm text-gray-500">Accessories</span>
+                                <span className="text-sm font-medium text-green-700">
+                                    +₹{calculation.accessoryCost.toLocaleString('en-IN')}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
                 {/* Material Details Card */}
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
                     <button

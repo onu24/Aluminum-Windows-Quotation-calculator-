@@ -16,6 +16,7 @@ interface AuthState {
     adminName: string;
     loginTime: number | null;
     sessionToken: string | null;
+    isInitializing: boolean;
 }
 
 interface LoginResult {
@@ -36,15 +37,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         adminName: '',
         loginTime: null,
         sessionToken: null,
+        isInitializing: true,
     });
 
     const logout = useCallback(() => {
-        setAuthState({
+        setAuthState(prev => ({
+            ...prev,
             isAuthenticated: false,
             adminName: '',
             loginTime: null,
             sessionToken: null,
-        });
+        }));
         localStorage.removeItem('adminSession');
         sessionStorage.removeItem('adminSession');
     }, []);
@@ -59,7 +62,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const expiry = localStorage.getItem('adminSession') ? REMEMBER_ME_EXPIRY_MS : SESSION_EXPIRY_MS;
 
                 if (session.loginTime && (Date.now() - session.loginTime < expiry)) {
-                    setAuthState({ ...session, isAuthenticated: true });
+                    setAuthState(prev => ({
+                        ...prev,
+                        ...session,
+                        isAuthenticated: true,
+                        isInitializing: false
+                    }));
+                    return; // Exit early to avoid setting isInitializing: false twice
                 } else {
                     localStorage.removeItem('adminSession');
                     sessionStorage.removeItem('adminSession');
@@ -71,6 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         // Cleanup old lockout data if it exists
         localStorage.removeItem('loginAttempts');
+        setAuthState(prev => ({ ...prev, isInitializing: false }));
     }, []);
 
     // Session activity tracker (resets expiration on activity)
@@ -136,10 +146,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 sessionToken: Math.random().toString(36).substring(2) + Date.now().toString(36),
             };
 
-            setAuthState({
+            setAuthState(prev => ({
+                ...prev,
                 ...newSession,
                 isAuthenticated: true,
-            });
+            }));
 
             // Persist based on rememberMe
             if (rememberMe) {

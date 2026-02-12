@@ -13,6 +13,9 @@ interface UseWindowCalculationProps {
     glassType: string;
     quantity: number;
     includeInstallation: boolean;
+    includeMesh?: boolean;
+    premiumFinishing?: boolean;
+    unitPriceOverride?: number;
 }
 
 interface CalculateWindowReturn {
@@ -29,6 +32,9 @@ export const useWindowCalculation = ({
     glassType,
     quantity,
     includeInstallation,
+    includeMesh = false,
+    premiumFinishing = false,
+    unitPriceOverride,
 }: UseWindowCalculationProps): CalculateWindowReturn => {
     const { profiles, glassTypes, additionalCharges, appSettings } = usePricing();
     const [result, setResult] = useState<CalculateWindowReturn>({
@@ -88,8 +94,11 @@ export const useWindowCalculation = ({
                     glass: glass!,
                     quantity: q,
                     includeInstallation,
+                    includeMesh,
+                    premiumFinishing,
                     additionalCharges,
-                    appSettings
+                    appSettings,
+                    unitPriceOverride
                 });
 
                 setResult({
@@ -112,7 +121,7 @@ export const useWindowCalculation = ({
         return () => {
             clearTimeout(handler);
         };
-    }, [width, height, profileType, glassType, quantity, includeInstallation, profiles, glassTypes, additionalCharges, appSettings]);
+    }, [width, height, profileType, glassType, quantity, includeInstallation, includeMesh, premiumFinishing, unitPriceOverride, profiles, glassTypes, additionalCharges, appSettings]);
 
     return result;
 };
