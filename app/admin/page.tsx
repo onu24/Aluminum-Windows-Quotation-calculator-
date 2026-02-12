@@ -257,7 +257,12 @@ export default function AdminPage() {
                     <button
                       onClick={() => {
                         const id = `custom-${Date.now()}`;
-                        setLocalGlassTypes([...localGlassTypes, { id, name: 'New Glass Type', surcharge: 0 }]);
+                        setLocalGlassTypes([...localGlassTypes, {
+                          id,
+                          name: 'New Glass Type',
+                          surcharge: 0,
+                          weightPerSqFt: 0
+                        }]);
                       }}
                       className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-colors"
                     >
@@ -270,6 +275,7 @@ export default function AdminPage() {
                       <thead>
                         <tr className="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                           <th className="px-6 py-3">Glass Type</th>
+                          <th className="px-6 py-3 text-right">Weight (kg/sqft)</th>
                           <th className="px-6 py-3 text-right">Surcharge (₹/Sq.Ft)</th>
                           <th className="px-6 py-3 text-right">Action</th>
                         </tr>
@@ -287,6 +293,20 @@ export default function AdminPage() {
                                   setLocalGlassTypes(newTypes);
                                 }}
                                 className="w-full max-w-sm px-2 py-1.5 border border-transparent hover:border-gray-200 focus:border-blue-300 rounded outline-none transition-all text-sm font-bold text-gray-900"
+                              />
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <input
+                                type="number"
+                                inputMode="decimal"
+                                step="0.01"
+                                value={glass.weightPerSqFt}
+                                onChange={(e) => {
+                                  const newTypes = [...localGlassTypes];
+                                  newTypes[index].weightPerSqFt = parseFloat(e.target.value) || 0;
+                                  setLocalGlassTypes(newTypes);
+                                }}
+                                className="w-24 px-2 py-3 border border-gray-200 rounded text-right font-medium text-gray-600 focus:ring-2 focus:ring-blue-100 outline-none text-base min-h-[48px]"
                               />
                             </td>
                             <td className="px-6 py-4 text-right">
