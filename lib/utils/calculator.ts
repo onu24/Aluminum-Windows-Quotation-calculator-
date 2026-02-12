@@ -9,6 +9,8 @@ interface CalculationParams {
     includeInstallation: boolean;
     includeMesh?: boolean;
     premiumFinishing?: boolean;
+    includeTransportation?: boolean;
+    includeLoadingUnloading?: boolean;
     additionalCharges: {
         transportation: number;
         loadingUnloading: number;
@@ -55,7 +57,9 @@ export const calculateWindowPricing = ({
     additionalCharges,
     accessoryPricing = { pleatedMesh: 150, installation: 2000, premiumFinishing: 500 },
     appSettings,
-    unitPriceOverride
+    unitPriceOverride,
+    includeTransportation = true,
+    includeLoadingUnloading = true
 }: CalculationParams): CalculationResult => {
     // Step 1: Calculate base dimensions
     // Area in Sq.Ft (1 sqft = 92903.04 mm²)
@@ -120,10 +124,13 @@ export const calculateWindowPricing = ({
     const totalAccessoryCost = accessoryCost * quantity;
 
     // Step 7: Calculate subtotal
+    const transportCharge = includeTransportation ? additionalCharges.transportation : 0;
+    const loadingCharge = includeLoadingUnloading ? additionalCharges.loadingUnloading : 0;
+
     const subtotal = totalValue +
         totalAccessoryCost +
-        additionalCharges.transportation +
-        additionalCharges.loadingUnloading +
+        transportCharge +
+        loadingCharge +
         installationCharge;
 
     // Step 8: Calculate GST
@@ -138,7 +145,7 @@ export const calculateWindowPricing = ({
 
     return {
         // Dimensions
-        areaSqFt: Math.round(areaSqFt * 100) / 100,
+        areaSqFt: Math.round(areaSqFt * 1000) / 1000,
         perimeterMeter: Math.round(perimeterMeter * 100) / 100,
         materialWeight: Math.round(materialWeight * 100) / 100,
 
@@ -157,8 +164,8 @@ export const calculateWindowPricing = ({
         unitPrice: Math.round(unitPrice * 100) / 100,
         totalValue: Math.round(totalValue * 100) / 100,
         installationCharge: Math.round(installationCharge * 100) / 100,
-        transportationCharge: additionalCharges.transportation,
-        loadingCharge: additionalCharges.loadingUnloading,
+        transportationCharge: transportCharge,
+        loadingCharge: loadingCharge,
         subtotal: Math.round(subtotal * 100) / 100,
         gstAmount: Math.round(gstAmount * 100) / 100,
         grandTotal: Math.round(grandTotal * 100) / 100,

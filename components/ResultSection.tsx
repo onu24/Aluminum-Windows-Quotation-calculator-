@@ -30,6 +30,12 @@ interface ResultSectionProps {
     showNotification: (message: string, type?: 'success' | 'error') => void;
     saveToHistory: (quoteNumber: string) => void;
     generateQuoteNumber: () => string;
+    includeInstallation: boolean;
+    setIncludeInstallation: (v: boolean) => void;
+    includeTransportation: boolean;
+    setIncludeTransportation: (v: boolean) => void;
+    includeLoadingUnloading: boolean;
+    setIncludeLoadingUnloading: (v: boolean) => void;
 }
 
 const ResultSection: React.FC<ResultSectionProps> = ({
@@ -54,6 +60,12 @@ const ResultSection: React.FC<ResultSectionProps> = ({
     showNotification,
     saveToHistory,
     generateQuoteNumber,
+    includeInstallation,
+    setIncludeInstallation,
+    includeTransportation,
+    setIncludeTransportation,
+    includeLoadingUnloading,
+    setIncludeLoadingUnloading,
 }) => {
     const glass = glassTypes.find(g => g.id === glassType);
 
@@ -105,7 +117,7 @@ const ResultSection: React.FC<ResultSectionProps> = ({
                         </div>
                         <div className="flex justify-between">
                             <span className="text-sm text-gray-500">Total Area</span>
-                            <span className="text-sm font-medium text-gray-900">{calculation.areaSqFt.toFixed(2)} Sq.Ft</span>
+                            <span className="text-sm font-medium text-gray-900">{calculation.areaSqFt.toFixed(3)} Sq.Ft</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-sm text-gray-500">Glass Type</span>
@@ -221,19 +233,52 @@ const ResultSection: React.FC<ResultSectionProps> = ({
                         <span className="text-base sm:text-lg font-medium text-gray-900">₹{calculation.totalValue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
                     </div>
 
-                    {/* Additional Charges - Green */}
-                    <div className="space-y-2 bg-green-50/50 p-4 rounded-lg">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-green-700">Transportation</span>
-                            <span className="text-sm sm:text-base font-medium text-green-700">₹{calculation.transportationCharge.toLocaleString('en-IN')}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-green-700">Loading/Unloading</span>
-                            <span className="text-sm sm:text-base font-medium text-green-700">₹{calculation.loadingCharge.toLocaleString('en-IN')}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-green-700">Installation ({quantity} × ₹{additionalCharges.installationPerWindow})</span>
-                            <span className="text-sm sm:text-base font-medium text-green-700">₹{calculation.installationCharge.toLocaleString('en-IN')}</span>
+                    {/* OPTIONAL CHARGES SECTION */}
+                    <div className="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2">Optional Charges</h4>
+
+                        <div className="space-y-3">
+                            <label className="flex items-center justify-between cursor-pointer group">
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={includeTransportation}
+                                        onChange={(e) => setIncludeTransportation(e.target.checked)}
+                                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    />
+                                    <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">Add Transportation</span>
+                                </div>
+                                <span className="text-sm font-bold text-gray-900">₹{additionalCharges.transportation.toLocaleString('en-IN')}</span>
+                            </label>
+
+                            <label className="flex items-center justify-between cursor-pointer group">
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={includeLoadingUnloading}
+                                        onChange={(e) => setIncludeLoadingUnloading(e.target.checked)}
+                                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    />
+                                    <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">Add Loading/Unloading</span>
+                                </div>
+                                <span className="text-sm font-bold text-gray-900">₹{additionalCharges.loadingUnloading.toLocaleString('en-IN')}</span>
+                            </label>
+
+                            <label className="flex items-center justify-between cursor-pointer group">
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={includeInstallation}
+                                        onChange={(e) => setIncludeInstallation(e.target.checked)}
+                                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    />
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">Add Installation Service</span>
+                                        <span className="text-[10px] text-gray-400">₹{additionalCharges.installationPerWindow} per window</span>
+                                    </div>
+                                </div>
+                                <span className="text-sm font-bold text-gray-900">₹{calculation.installationCharge.toLocaleString('en-IN')}</span>
+                            </label>
                         </div>
                     </div>
 

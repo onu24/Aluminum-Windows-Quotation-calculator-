@@ -53,6 +53,8 @@ export default function Home() {
   const [glassType, setGlassType] = useState<string>(glassTypes[1]?.id || glassTypes[0]?.id || ''); // Default to 8mm Clear if exists
   const [includeMesh, setIncludeMesh] = useState<boolean>(false);
   const [includeInstallation, setIncludeInstallation] = useState<boolean>(false);
+  const [includeTransportation, setIncludeTransportation] = useState<boolean>(true);
+  const [includeLoadingUnloading, setIncludeLoadingUnloading] = useState<boolean>(true);
   const [premiumFinishing, setPremiumFinishing] = useState<boolean>(false);
 
   // Hybrid Approach State
@@ -98,6 +100,8 @@ export default function Home() {
     includeInstallation,
     includeMesh,
     premiumFinishing,
+    includeTransportation,
+    includeLoadingUnloading,
     unitPriceOverride
   });
 
@@ -117,9 +121,9 @@ export default function Home() {
 
     const formula = windowPricingFormulas.find(f => f.code === code);
     if (formula) {
-      // 1. Set dimensions from formula
-      if (formula.defaultWidth) setWidth(formula.defaultWidth.toString());
-      if (formula.defaultHeight) setHeight(formula.defaultHeight.toString());
+      // 1. Clear dimensions for manual entry
+      setWidth('');
+      setHeight('');
       if (formula.defaultQuantity) setQuantity(formula.defaultQuantity.toString());
 
       // 2. Set Profile and Glass
@@ -143,7 +147,7 @@ export default function Home() {
       // 3. Set fixed unit rate directly from the formula
       setUnitPriceOverride(formula.basePricePerSqft);
 
-      showNotification(`Window ${code} loaded with fixed formula rate`, 'success');
+      showNotification(`✓ Formula loaded for ${code}: ₹${formula.basePricePerSqft.toFixed(2)}/Sq.Ft`, 'success');
     }
   };
 
@@ -302,6 +306,8 @@ export default function Home() {
     setGlassType(glassTypes[0]?.id || '');
     setIncludeMesh(false);
     setIncludeInstallation(false);
+    setIncludeTransportation(true);
+    setIncludeLoadingUnloading(true);
     setPremiumFinishing(false);
     setCustomerName('');
     setCustomerContact('');
@@ -682,6 +688,12 @@ export default function Home() {
                         showNotification={showNotification}
                         saveToHistory={saveToHistory}
                         generateQuoteNumber={generateQuoteNumber}
+                        includeInstallation={includeInstallation}
+                        setIncludeInstallation={setIncludeInstallation}
+                        includeTransportation={includeTransportation}
+                        setIncludeTransportation={setIncludeTransportation}
+                        includeLoadingUnloading={includeLoadingUnloading}
+                        setIncludeLoadingUnloading={setIncludeLoadingUnloading}
                       />
 
 
