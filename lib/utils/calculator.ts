@@ -62,10 +62,10 @@ export const calculateWindowPricing = ({
     includeTransportation = true,
     includeLoadingUnloading = true
 }: CalculationParams): CalculationResult => {
-    // ✅ CORRECT PRECISION CALCULATION - NO INTERMEDIATE ROUNDING
-    const areaMm2 = Number(width) * Number(height);
-    const areaSqFtFull = areaMm2 / 92903;
-    const areaSqFtDisplay = parseFloat(areaSqFtFull.toFixed(3));
+    // ✅ CORRECT PRECISION CALCULATION - USING ROUNDED AREA AS BASIS
+    const area = parseFloat(((Number(width) * Number(height)) / 92903).toFixed(3));
+    const areaSqFtFull = area; // Now using the rounded area for all calculations
+    const areaSqFtDisplay = area;
 
     // Perimeter in Meters
     const perimeterMeter = (2 * (width + height)) / 1000;
