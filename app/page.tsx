@@ -15,8 +15,9 @@ import ResultSection from '@/components/ResultSection';
 import { CatalogProvider } from '@/context/CatalogContext';
 import ModeSwitcher from '@/components/catalog/ModeSwitcher';
 import ProductCatalog from '@/components/catalog/ProductCatalog';
-import { productsData } from '@/lib/data/productsData';
 import { windowPricingFormulas } from '@/lib/data/pricingFormulas';
+import { WINDOW_FORMULAS, type WindowCode } from '@/lib/constants/windowFormulas';
+import { calculateWindowPrice } from '@/lib/utils/calculatePrice';
 
 interface SavedQuote {
   id: string;
@@ -145,9 +146,16 @@ export default function Home() {
       }
 
       // 3. Set fixed unit rate directly from the formula
-      setUnitPriceOverride(formula.basePricePerSqft);
+      // 3. Set fixed unit rate directly from the new WINDOW_FORMULAS constant
+      const exactFormula = WINDOW_FORMULAS[code as WindowCode];
+      if (exactFormula) {
+        setUnitPriceOverride(exactFormula.pricePerSqFt);
+      } else {
+        setUnitPriceOverride(formula.basePricePerSqft);
+      }
 
-      showNotification(`✓ Formula loaded for ${code}: ₹${formula.basePricePerSqft.toFixed(2)}/Sq.Ft`, 'success');
+      const rate = exactFormula ? exactFormula.pricePerSqFt : formula.basePricePerSqft;
+      showNotification(`✓ Formula loaded for ${code}: ₹${rate.toFixed(2)}/Sq.Ft`, 'success');
     }
   };
 

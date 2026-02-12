@@ -119,7 +119,7 @@ export default function AdminPage() {
               <div className="flex items-center gap-2 sm:gap-4">
                 <Link
                   href="/"
-                  className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-all text-sm font-bold min-h-[44px]"
+                  className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-all text-xs sm:text-sm font-bold min-h-[44px]"
                 >
                   <FaArrowLeft className="w-4 h-4" />
                   <span className="hidden sm:inline">Back to Calculator</span>
@@ -133,7 +133,7 @@ export default function AdminPage() {
               <div className="flex items-center gap-2 sm:gap-3">
                 <button
                   onClick={logout}
-                  className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-all border border-red-100 text-sm font-bold min-h-[44px]"
+                  className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-all border border-red-100 text-xs sm:text-sm font-bold min-h-[44px]"
                 >
                   <FaSync className="w-4 h-4" />
                   <span className="hidden sm:inline">Logout</span>
@@ -141,7 +141,7 @@ export default function AdminPage() {
                 <button
                   onClick={handleSave}
                   disabled={saveStatus === 'saving'}
-                  className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg min-h-[48px] sm:min-h-0 min-w-[48px] ${saveStatus === 'success' ? 'bg-green-600 text-white shadow-green-200' :
+                  className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-lg min-h-[44px] sm:min-h-0 min-w-[44px] ${saveStatus === 'success' ? 'bg-green-600 text-white shadow-green-200' :
                     saveStatus === 'error' ? 'bg-red-600 text-white shadow-red-200' :
                       'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200'
                     }`}
@@ -156,7 +156,7 @@ export default function AdminPage() {
 
           {/* Tab Navigation */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex gap-4 sm:gap-8 border-t border-gray-100 mt-2 overflow-x-auto no-scrollbar whitespace-nowrap">
+            <div className="flex gap-4 sm:gap-8 border-t border-gray-100 mt-2 overflow-x-auto no-scrollbar whitespace-nowrap pb-1">
               {[
                 { id: 'pricing', label: 'Pricing Engine', icon: FaDollarSign },
                 { id: 'materials', icon: FaUpload, label: 'Materials & DB' },
@@ -165,7 +165,7 @@ export default function AdminPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`py-4 px-2 text-sm font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === tab.id ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+                  className={`py-3 sm:py-4 px-2 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === tab.id ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
                     }`}
                 >
                   <tab.icon className="w-4 h-4" />
@@ -188,16 +188,18 @@ export default function AdminPage() {
               >
                 {/* Profile Systems Table */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                  <div className="p-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-                    <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <div className="p-4 sm:p-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                    <h2 className="text-base sm:text-lg font-bold text-gray-900 flex items-center gap-2">
                       <div className="p-2 bg-blue-100 rounded-lg"><FaDollarSign className="w-4 h-4 text-blue-600" /></div>
                       Profile Systems Pricing
                     </h2>
-                    <span className="text-[10px] font-black text-gray-400 bg-white border border-gray-200 px-2 py-1 rounded uppercase tracking-widest">
+                    <span className="text-[10px] font-black text-gray-400 bg-white border border-gray-200 px-2 py-1 rounded uppercase tracking-widest hidden sm:inline-block">
                       Cost per Sq.Ft
                     </span>
                   </div>
-                  <div className="overflow-x-auto">
+
+                  {/* Desktop Table */}
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left">
                       <thead>
                         <tr className="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest">
@@ -245,12 +247,59 @@ export default function AdminPage() {
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Mobile Card View */}
+                  <div className="md:hidden divide-y divide-gray-100">
+                    {Object.values(localProfiles).map((profile) => (
+                      <div key={profile.id} className="p-4 space-y-4">
+                        <div className="flex justify-between items-start gap-4">
+                          <div>
+                            <p className="font-bold text-gray-900 text-base">{profile.name}</p>
+                            <p className="text-sm text-gray-500 mt-1">{profile.description}</p>
+                          </div>
+                          <span className="text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded shrink-0">
+                            {profile.frameSize}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Base Price (₹)</label>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              value={profile.basePrice}
+                              onChange={(e) => setLocalProfiles({
+                                ...localProfiles,
+                                [profile.id]: { ...profile, basePrice: parseFloat(e.target.value) || 0 }
+                              })}
+                              className="w-full px-3 py-3 border border-gray-200 rounded-lg font-bold text-blue-600 focus:ring-2 focus:ring-blue-100 outline-none text-base min-h-[44px]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Weight (kg/m)</label>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              step="0.01"
+                              value={profile.weightPerMeter}
+                              onChange={(e) => setLocalProfiles({
+                                ...localProfiles,
+                                [profile.id]: { ...profile, weightPerMeter: parseFloat(e.target.value) || 0 }
+                              })}
+                              className="w-full px-3 py-3 border border-gray-200 rounded-lg font-medium text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none text-base min-h-[44px]"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Glass Types Table */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                  <div className="p-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-                    <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <div className="p-4 sm:p-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                    <h2 className="text-base sm:text-lg font-bold text-gray-900 flex items-center gap-2">
                       <div className="p-2 bg-green-100 rounded-lg"><FaFileAlt className="w-4 h-4 text-green-600" /></div>
                       Glass Pricing & Surcharges
                     </h2>
@@ -267,10 +316,13 @@ export default function AdminPage() {
                       className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-colors"
                     >
                       <FaPlus className="w-3 h-3" />
-                      Add Glass
+                      <span className="hidden sm:inline">Add Glass</span>
+                      <span className="sm:hidden">Add</span>
                     </button>
                   </div>
-                  <div className="overflow-x-auto">
+
+                  {/* Desktop Table */}
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left font-medium">
                       <thead>
                         <tr className="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest">
@@ -335,68 +387,127 @@ export default function AdminPage() {
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Mobile Card View */}
+                  <div className="md:hidden divide-y divide-gray-100">
+                    {localGlassTypes.map((glass, index) => (
+                      <div key={glass.id} className="p-4 space-y-4">
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={glass.name}
+                            onChange={(e) => {
+                              const newTypes = [...localGlassTypes];
+                              newTypes[index].name = e.target.value;
+                              setLocalGlassTypes(newTypes);
+                            }}
+                            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg font-bold text-gray-900 focus:ring-2 focus:ring-blue-100 outline-none text-base"
+                            placeholder="Glass Name"
+                          />
+                          <button
+                            onClick={() => setLocalGlassTypes(localGlassTypes.filter(g => g.id !== glass.id))}
+                            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all shrink-0"
+                          >
+                            <FaTrash className="w-5 h-5" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Weight (kg/sqft)</label>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              step="0.01"
+                              value={glass.weightPerSqFt}
+                              onChange={(e) => {
+                                const newTypes = [...localGlassTypes];
+                                newTypes[index].weightPerSqFt = parseFloat(e.target.value) || 0;
+                                setLocalGlassTypes(newTypes);
+                              }}
+                              className="w-full px-3 py-3 border border-gray-200 rounded-lg font-medium text-gray-700 focus:ring-2 focus:ring-blue-100 outline-none text-base min-h-[44px]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Surcharge (₹)</label>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              value={glass.surcharge}
+                              onChange={(e) => {
+                                const newTypes = [...localGlassTypes];
+                                newTypes[index].surcharge = parseFloat(e.target.value) || 0;
+                                setLocalGlassTypes(newTypes);
+                              }}
+                              className="w-full px-3 py-3 border border-gray-200 rounded-lg font-bold text-green-600 focus:ring-2 focus:ring-green-100 outline-none text-base min-h-[44px]"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Additional Charges */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                    <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-100 pb-2">Logistics Charges</h2>
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                    <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4 sm:mb-6 border-b border-gray-100 pb-2">Logistics Charges</h2>
                     <div className="space-y-4">
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
                         <label className="text-sm font-bold text-gray-700">Transportation (Base)</label>
-                        <div className="relative">
+                        <div className="relative w-full sm:w-auto">
                           <span className="absolute left-3 top-3.5 text-xs text-gray-400">₹</span>
                           <input
                             type="number"
                             inputMode="decimal"
                             value={localCharges.transportation}
                             onChange={(e) => setLocalCharges({ ...localCharges, transportation: parseFloat(e.target.value) || 0 })}
-                            className="w-32 pl-7 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 outline-none text-right font-bold text-blue-900 shadow-sm text-base min-h-[48px]"
+                            className="w-full sm:w-32 pl-7 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 outline-none text-right font-bold text-blue-900 shadow-sm text-base min-h-[48px]"
                           />
                         </div>
                       </div>
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
                         <label className="text-sm font-bold text-gray-700">Loading/Unloading</label>
-                        <div className="relative">
+                        <div className="relative w-full sm:w-auto">
                           <span className="absolute left-3 top-3.5 text-xs text-gray-400">₹</span>
                           <input
                             type="number"
                             inputMode="decimal"
                             value={localCharges.loadingUnloading}
                             onChange={(e) => setLocalCharges({ ...localCharges, loadingUnloading: parseFloat(e.target.value) || 0 })}
-                            className="w-32 pl-7 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 outline-none text-right font-bold text-blue-900 shadow-sm text-base min-h-[48px]"
+                            className="w-full sm:w-32 pl-7 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 outline-none text-right font-bold text-blue-900 shadow-sm text-base min-h-[48px]"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                    <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-100 pb-2">Service Fees</h2>
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                    <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4 sm:mb-6 border-b border-gray-100 pb-2">Service Fees</h2>
                     <div className="space-y-4">
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
                         <label className="text-sm font-bold text-gray-700">Installation (Per Window)</label>
-                        <div className="relative">
+                        <div className="relative w-full sm:w-auto">
                           <span className="absolute left-3 top-3.5 text-xs text-gray-400">₹</span>
                           <input
                             type="number"
                             inputMode="decimal"
                             value={localCharges.installationPerWindow}
                             onChange={(e) => setLocalCharges({ ...localCharges, installationPerWindow: parseFloat(e.target.value) || 0 })}
-                            className="w-32 pl-7 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 outline-none text-right font-bold text-blue-900 shadow-sm text-base min-h-[48px]"
+                            className="w-full sm:w-32 pl-7 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 outline-none text-right font-bold text-blue-900 shadow-sm text-base min-h-[48px]"
                           />
                         </div>
                       </div>
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
                         <label className="text-sm font-bold text-gray-700">Service Call Fee</label>
-                        <div className="relative">
+                        <div className="relative w-full sm:w-auto">
                           <span className="absolute left-3 top-3.5 text-xs text-gray-400">₹</span>
                           <input
                             type="number"
                             inputMode="decimal"
                             value={localCharges.serviceCall}
                             onChange={(e) => setLocalCharges({ ...localCharges, serviceCall: parseFloat(e.target.value) || 0 })}
-                            className="w-32 pl-7 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 outline-none text-right font-bold text-blue-900 shadow-sm text-base min-h-[48px]"
+                            className="w-full sm:w-32 pl-7 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 outline-none text-right font-bold text-blue-900 shadow-sm text-base min-h-[48px]"
                           />
                         </div>
                       </div>
@@ -414,33 +525,33 @@ export default function AdminPage() {
                 exit={{ opacity: 0, scale: 0.98 }}
                 className="space-y-6"
               >
-                <div className="bg-white rounded-3xl p-12 text-center border-2 border-dashed border-gray-200 max-w-2xl mx-auto mt-20">
-                  <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600">
-                    <FaSync className="w-10 h-10 animate-pulse" />
+                <div className="bg-white rounded-3xl p-6 sm:p-12 text-center border-2 border-dashed border-gray-200 max-w-2xl mx-auto mt-8 sm:mt-20">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 text-blue-600">
+                    <FaSync className="w-8 h-8 sm:w-10 sm:h-10 animate-pulse" />
                   </div>
-                  <h2 className="text-2xl font-black text-gray-900 mb-2">Synchronize Configuration</h2>
-                  <p className="text-gray-500 mb-8 max-w-sm mx-auto">Import pricing data from a JSON file or export your current setup to use on other devices.</p>
+                  <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-2">Synchronize Configuration</h2>
+                  <p className="text-sm sm:text-base text-gray-500 mb-6 sm:mb-8 max-w-sm mx-auto">Import pricing data from a JSON file or export your current setup to use on other devices.</p>
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <button
                       onClick={handleExport}
-                      className="flex-1 w-full sm:w-auto items-center justify-center gap-2 py-4 px-8 bg-white border-2 border-gray-200 rounded-2xl text-sm font-black text-gray-800 hover:border-blue-600 hover:text-blue-600 transition-all flex"
+                      className="flex-1 w-full sm:w-auto items-center justify-center gap-2 py-3 sm:py-4 px-6 sm:px-8 bg-white border-2 border-gray-200 rounded-2xl text-sm font-black text-gray-800 hover:border-blue-600 hover:text-blue-600 transition-all flex min-h-[48px]"
                     >
                       <FaDownload className="w-4 h-4" />
                       Export Pricing
                     </button>
 
-                    <label className="flex-1 w-full sm:w-auto items-center justify-center gap-2 py-4 px-8 bg-blue-600 rounded-2xl text-sm font-black text-white hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 cursor-pointer flex">
+                    <label className="flex-1 w-full sm:w-auto items-center justify-center gap-2 py-3 sm:py-4 px-6 sm:px-8 bg-blue-600 rounded-2xl text-sm font-black text-white hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 cursor-pointer flex min-h-[48px]">
                       <FaUpload className="w-4 h-4" />
                       Import Pricing
                       <input type="file" accept=".json" onChange={handleImport} className="hidden" />
                     </label>
                   </div>
 
-                  <div className="mt-12 pt-12 border-t border-gray-100">
+                  <div className="mt-8 sm:mt-12 pt-8 sm:pt-12 border-t border-gray-100">
                     <button
                       onClick={resetToDefaults}
-                      className="text-xs font-black text-red-500 uppercase tracking-[.2em] flex items-center gap-2 mx-auto hover:text-red-700 transition-colors"
+                      className="text-xs font-black text-red-500 uppercase tracking-[.2em] flex items-center gap-2 mx-auto hover:text-red-700 transition-colors py-2"
                     >
                       <FaUndo className="w-3 h-3" />
                       Reset to System Defaults
@@ -456,20 +567,20 @@ export default function AdminPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="grid grid-cols-1 md:grid-cols-12 gap-8"
+                className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8"
               >
                 {/* Company Profile */}
                 <div className="md:col-span-8 space-y-6">
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-                    <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-8">
+                    <div className="flex items-center gap-4 mb-6 sm:mb-8 border-b border-gray-100 pb-4">
                       <div className="p-3 bg-indigo-100 rounded-xl"><FaBuilding className="w-6 h-6 text-indigo-600" /></div>
                       <div>
-                        <h2 className="text-xl font-black text-gray-900">Company Information</h2>
+                        <h2 className="text-lg sm:text-xl font-black text-gray-900">Company Information</h2>
                         <p className="text-xs text-gray-500">How your business appears on generated PDFs</p>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                       <div className="sm:col-span-2">
                         <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Business Name</label>
                         <input
@@ -510,7 +621,7 @@ export default function AdminPage() {
                             })}
                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-50 outline-none font-bold text-gray-900 transition-all text-base min-h-[48px]"
                           />
-                          <span className="absolute right-4 top-3 text-gray-400 font-bold">%</span>
+                          <span className="absolute right-4 top-3.5 text-gray-400 font-bold">%</span>
                         </div>
                       </div>
                       <div>
@@ -535,11 +646,11 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-                    <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-8">
+                    <div className="flex items-center gap-4 mb-6 sm:mb-8 border-b border-gray-100 pb-4">
                       <div className="p-3 bg-amber-100 rounded-xl"><FaRuler className="w-6 h-6 text-amber-600" /></div>
                       <div>
-                        <h2 className="text-xl font-black text-gray-900">Dimension Constraints</h2>
+                        <h2 className="text-lg sm:text-xl font-black text-gray-900">Dimension Constraints</h2>
                         <p className="text-xs text-gray-500">Define minimum and maximum window sizes</p>
                       </div>
                     </div>
@@ -591,7 +702,7 @@ export default function AdminPage() {
 
                 {/* Logo Upload Section */}
                 <div className="md:col-span-4 space-y-6">
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 flex flex-col items-center">
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-8 flex flex-col items-center">
                     <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-100 pb-2 w-full text-center">Corporate Branding</h2>
 
                     <div className="relative group w-full max-w-[200px] aspect-square bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden mb-6 transition-all hover:border-indigo-400">
@@ -628,7 +739,7 @@ export default function AdminPage() {
                     )}
                   </div>
 
-                  <div className="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-8 text-white shadow-xl shadow-indigo-200">
+                  <div className="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-indigo-200">
                     <div className="flex items-center gap-2 mb-4">
                       <FaCheckCircle className="w-4 h-4 text-indigo-200" />
                       <h3 className="text-xs font-black uppercase tracking-widest text-indigo-100">Quick Support</h3>
@@ -658,7 +769,7 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
-    </ProtectedRoute>
+    </ProtectedRoute >
   );
 }
 
